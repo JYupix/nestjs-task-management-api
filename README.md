@@ -69,24 +69,59 @@ Base URL: `http://localhost:3000/api`
 | `PATCH` | `/tasks/:id` | Update a task | `{ title?, description?, status? }` |
 | `DELETE` | `/tasks/:id` | Delete a task | - |
 
-### Request Examples
+---
 
-#### Create a Task
-```bash
-POST /api/tasks
-Content-Type: application/json
+## 📝 API Response Examples
 
-{
-  "title": "Complete documentation",
-  "description": "Write comprehensive API documentation",
-  "status": "PENDING"
-}
+### ✅ GET `/api/tasks` - Get all tasks
+**Success Response (200):**
+```json
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "title": "Complete documentation",
+    "description": "Write comprehensive API documentation",
+    "status": "PENDING",
+    "createdAt": "2026-01-03T20:00:00.000Z"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440001",
+    "title": "Review pull requests",
+    "description": "Review team PRs",
+    "status": "COMPLETED",
+    "createdAt": "2026-01-03T19:30:00.000Z"
+  }
+]
 ```
 
-#### Response
+**Available filters:**
+- `status`: Filter by task status (`PENDING` or `COMPLETED`)
+- `title`: Filter tasks by title (partial match)
+
+**Example with filters:**
+```bash
+# Get all pending tasks
+GET /api/tasks?status=PENDING
+
+# Search tasks by title
+GET /api/tasks?title=documentation
+
+# Combine filters
+GET /api/tasks?status=COMPLETED&title=API
+```
+
+---
+
+### ✅ GET `/api/tasks/:id` - Get task by ID
+**Request:**
+```bash
+GET /api/tasks/550e8400-e29b-41d4-a716-446655440000
+```
+
+**Success Response (200):**
 ```json
 {
-  "id": "uuid-here",
+  "id": "550e8400-e29b-41d4-a716-446655440000",
   "title": "Complete documentation",
   "description": "Write comprehensive API documentation",
   "status": "PENDING",
@@ -94,25 +129,126 @@ Content-Type: application/json
 }
 ```
 
-#### Get All Tasks (with filters)
-```bash
-GET /api/tasks?status=PENDING&title=documentation
+**Error Response (404):**
+```json
+{
+  "message": "Task with ID 550e8400-e29b-41d4-a716-446655440000 not found",
+  "error": "Not Found",
+  "statusCode": 404
+}
 ```
 
-#### Update a Task
-```bash
-PATCH /api/tasks/:id
-Content-Type: application/json
+---
 
+### ✅ POST `/api/tasks` - Create a task
+**Request Body:**
+```json
+{
+  "title": "Complete documentation",
+  "description": "Write comprehensive API documentation",
+  "status": "PENDING"
+}
+```
+
+**Success Response (201):**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Complete documentation",
+  "description": "Write comprehensive API documentation",
+  "status": "PENDING",
+  "createdAt": "2026-01-03T20:00:00.000Z"
+}
+```
+
+**Error Response - Validation (400):**
+```json
+{
+  "message": [
+    "title must be a string",
+    "Title must not be empty",
+    "description must be a string"
+  ],
+  "error": "Bad Request",
+  "statusCode": 400
+}
+```
+
+---
+
+### ✅ PATCH `/api/tasks/:id` - Update a task
+**Request:**
+```bash
+PATCH /api/tasks/550e8400-e29b-41d4-a716-446655440000
+```
+
+**Request Body:**
+```json
 {
   "status": "COMPLETED"
 }
 ```
 
-#### Delete a Task
-```bash
-DELETE /api/tasks/:id
+**Success Response (200):**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Complete documentation",
+  "description": "Write comprehensive API documentation",
+  "status": "COMPLETED",
+  "createdAt": "2026-01-03T20:00:00.000Z"
+}
 ```
+
+**Error Response (404):**
+```json
+{
+  "message": "Task with ID 550e8400-e29b-41d4-a716-446655440000 not found",
+  "error": "Not Found",
+  "statusCode": 404
+}
+```
+
+---
+
+### ✅ DELETE `/api/tasks/:id` - Delete a task
+**Request:**
+```bash
+DELETE /api/tasks/550e8400-e29b-41d4-a716-446655440000
+```
+
+**Success Response (200):**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "title": "Complete documentation",
+  "description": "Write comprehensive API documentation",
+  "status": "COMPLETED",
+  "createdAt": "2026-01-03T20:00:00.000Z"
+}
+```
+
+**Error Response (404):**
+```json
+{
+  "message": "Task with ID 550e8400-e29b-41d4-a716-446655440000 not found",
+  "error": "Not Found",
+  "statusCode": 404
+}
+```
+
+---
+
+## 📊 HTTP Status Codes
+
+| Code | Description |
+|------|-------------|
+| 200 | OK - Request successful |
+| 201 | Created - Resource created successfully |
+| 400 | Bad Request - Invalid data provided |
+| 404 | Not Found - Resource not found |
+| 500 | Internal Server Error - Server error |
+
 
 ## 📝 License
 
@@ -121,7 +257,3 @@ This project is [MIT licensed](LICENSE).
 ## 👤 Author
 
 Built with ❤️ using NestJS and Prisma
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

@@ -19,7 +19,7 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  findAll(@Query() filters: FindTasksDto) {
+  findAll(@Query() filters: FindTasksDto): Promise<Task[]> {
     return this.tasksService.findAll(filters);
   }
 

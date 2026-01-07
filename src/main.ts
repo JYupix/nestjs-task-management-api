@@ -19,7 +19,9 @@ async function bootstrap() {
   // Swagger Configuration
   const config = new DocumentBuilder()
     .setTitle('Tasks API')
-    .setDescription('API para gestión de tareas con autenticación JWT')
+    .setDescription(
+      'Task management API with JWT authentication and role-based authorization',
+    )
     .setVersion('1.0')
     .addBearerAuth(
       {

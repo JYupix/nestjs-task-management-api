@@ -12,10 +12,13 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @ApiOperation({ summary: 'Login de usuario' })
+  @ApiOperation({ summary: 'User login' })
   @ApiBody({ type: LoginDto })
-  @ApiResponse({ status: 200, description: 'Login exitoso, retorna JWT token' })
-  @ApiResponse({ status: 401, description: 'Credenciales inválidas' })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful, returns JWT token',
+  })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @Post('login')
   async login(
     @Request() req: { user: User },
@@ -23,13 +26,13 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
-  @ApiOperation({ summary: 'Registro de nuevo usuario' })
+  @ApiOperation({ summary: 'Register new user' })
   @ApiResponse({
     status: 201,
-    description: 'Usuario creado, retorna JWT token',
+    description: 'User created successfully, returns JWT token',
   })
-  @ApiResponse({ status: 409, description: 'Email ya existe' })
-  @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
+  @ApiResponse({ status: 400, description: 'Invalid data' })
   @Post('register')
   async register(@Body() dto: RegisterDto): Promise<{ access_token: string }> {
     return this.authService.register(dto);

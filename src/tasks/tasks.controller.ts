@@ -32,8 +32,8 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Obtener todas las tareas del usuario' })
-  @ApiResponse({ status: 200, description: 'Lista de tareas' })
+  @ApiOperation({ summary: 'Get all user tasks' })
+  @ApiResponse({ status: 200, description: 'List of tasks' })
   async findAll(
     @Query() filters: FindTasksDto,
     @CurrentUser() user: JwtPayload,
@@ -42,10 +42,13 @@ export class TasksController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Obtener una tarea por ID' })
-  @ApiResponse({ status: 200, description: 'Tarea encontrada' })
-  @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
-  @ApiResponse({ status: 403, description: 'No tienes acceso a esta tarea' })
+  @ApiOperation({ summary: 'Get task by ID' })
+  @ApiResponse({ status: 200, description: 'Task found' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  @ApiResponse({
+    status: 403,
+    description: 'You do not have access to this task',
+  })
   async findById(
     @Param('id') id: string,
     @CurrentUser() user: JwtPayload,
@@ -54,9 +57,9 @@ export class TasksController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Crear nueva tarea' })
-  @ApiResponse({ status: 201, description: 'Tarea creada exitosamente' })
-  @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @ApiOperation({ summary: 'Create new task' })
+  @ApiResponse({ status: 201, description: 'Task created successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid data' })
   async create(
     @Body() dto: CreateTaskDto,
     @CurrentUser() user: JwtPayload,
@@ -65,10 +68,13 @@ export class TasksController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar tarea' })
-  @ApiResponse({ status: 200, description: 'Tarea actualizada' })
-  @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
-  @ApiResponse({ status: 403, description: 'No tienes acceso a esta tarea' })
+  @ApiOperation({ summary: 'Update task' })
+  @ApiResponse({ status: 200, description: 'Task updated successfully' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  @ApiResponse({
+    status: 403,
+    description: 'You do not have access to this task',
+  })
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateTaskDto,
@@ -78,10 +84,13 @@ export class TasksController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Eliminar tarea' })
-  @ApiResponse({ status: 200, description: 'Tarea eliminada' })
-  @ApiResponse({ status: 404, description: 'Tarea no encontrada' })
-  @ApiResponse({ status: 403, description: 'No tienes acceso a esta tarea' })
+  @ApiOperation({ summary: 'Delete task' })
+  @ApiResponse({ status: 200, description: 'Task deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  @ApiResponse({
+    status: 403,
+    description: 'You do not have access to this task',
+  })
   async delete(
     @Param('id') id: string,
     @CurrentUser() user: JwtPayload,

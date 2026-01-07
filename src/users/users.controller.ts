@@ -31,39 +31,39 @@ export class UsersController {
 
   @Roles(UserRole.ADMIN)
   @Get()
-  @ApiOperation({ summary: 'Obtener todos los usuarios (Solo ADMIN)' })
-  @ApiResponse({ status: 200, description: 'Lista de usuarios' })
-  @ApiResponse({ status: 403, description: 'No tienes permisos (Solo ADMIN)' })
+  @ApiOperation({ summary: 'Get all users (Admin only)' })
+  @ApiResponse({ status: 200, description: 'List of users' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Roles(UserRole.ADMIN)
   @Get(':id')
-  @ApiOperation({ summary: 'Obtener usuario por ID (Solo ADMIN)' })
-  @ApiResponse({ status: 200, description: 'Usuario encontrado' })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  @ApiResponse({ status: 403, description: 'No tienes permisos (Solo ADMIN)' })
+  @ApiOperation({ summary: 'Get user by ID (Admin only)' })
+  @ApiResponse({ status: 200, description: 'User found' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async findById(@Param('id') id: string): Promise<User> {
     return this.usersService.findById(id);
   }
 
   @Roles(UserRole.ADMIN)
   @Post()
-  @ApiOperation({ summary: 'Crear usuario manualmente (Solo ADMIN)' })
-  @ApiResponse({ status: 201, description: 'Usuario creado' })
-  @ApiResponse({ status: 409, description: 'Email ya existe' })
-  @ApiResponse({ status: 403, description: 'No tienes permisos (Solo ADMIN)' })
+  @ApiOperation({ summary: 'Create user manually (Admin only)' })
+  @ApiResponse({ status: 201, description: 'User created successfully' })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async create(@Body() dto: CreateUserDto): Promise<User> {
     return this.usersService.create(dto);
   }
 
   @Roles(UserRole.ADMIN)
   @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar usuario (Solo ADMIN)' })
-  @ApiResponse({ status: 200, description: 'Usuario actualizado' })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  @ApiResponse({ status: 403, description: 'No tienes permisos (Solo ADMIN)' })
+  @ApiOperation({ summary: 'Update user (Admin only)' })
+  @ApiResponse({ status: 200, description: 'User updated successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
@@ -73,10 +73,10 @@ export class UsersController {
 
   @Roles(UserRole.ADMIN)
   @Delete(':id')
-  @ApiOperation({ summary: 'Eliminar usuario (Solo ADMIN)' })
-  @ApiResponse({ status: 200, description: 'Usuario eliminado' })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
-  @ApiResponse({ status: 403, description: 'No tienes permisos (Solo ADMIN)' })
+  @ApiOperation({ summary: 'Delete user (Admin only)' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async delete(@Param('id') id: string): Promise<User> {
     return this.usersService.delete(id);
   }

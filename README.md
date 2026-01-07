@@ -163,19 +163,6 @@ PORT=3000
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
 ```
 
-### Database Setup
-
-```bash
-# Run migrations
-npx prisma migrate dev
-
-# Generate Prisma Client
-npx prisma generate
-
-# (Optional) Seed admin user
-npm run seed
-```
-
 ---
 
 ## 🏃 Running the App
@@ -587,79 +574,6 @@ prisma/
 | 404 | Not Found - Resource not found |
 | 409 | Conflict - Resource already exists (e.g., email) |
 | 500 | Internal Server Error - Server error |
-
----
-
-## 🛠️ Scripts
-
-```bash
-# Development
-npm run start:dev          # Start with hot-reload
-
-# Build
-npm run build              # Build for production
-
-# Production
-npm run start:prod         # Run production build
-
-# Database
-npx prisma migrate dev     # Run migrations (dev)
-npx prisma generate        # Generate Prisma Client
-npx prisma studio          # Open Prisma Studio GUI
-npm run seed               # Seed admin user
-
-# Code Quality
-npm run lint               # Run ESLint
-npm run format             # Format code with Prettier
-
-# Testing
-npm run test               # Run unit tests
-npm run test:e2e           # Run e2e tests
-npm run test:cov           # Generate coverage report
-```
-
----
-
-## 🔧 Development Tips
-
-### Testing with cURL
-
-```bash
-# Register
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@test.com","password":"test123","name":"Test User"}'
-
-# Login
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@test.com","password":"test123"}'
-
-# Get Tasks (with JWT)
-curl http://localhost:3000/api/tasks \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
-
-# Create Task
-curl -X POST http://localhost:3000/api/tasks \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"title":"My Task","description":"Do something","status":"PENDING"}'
-```
-
-### Environment Variables
-
-For local development, you can use different env files:
-
-```bash
-# Development
-.env.development.local
-
-# Testing
-.env.test.local
-
-# Production
-.env.production.local
-```
 
 ---
 

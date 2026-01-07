@@ -139,7 +139,7 @@ AppModule
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/JYupix/nestjs-task-management-api.git
 cd SecondProject
 
 # Install dependencies

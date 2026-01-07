@@ -35,8 +35,6 @@
 - [API Endpoints](#-api-endpoints)
 - [Database Schema](#-database-schema)
 - [Project Structure](#-project-structure)
-- [Scripts](#-scripts)
-
 ---
 
 ## 📋 Description

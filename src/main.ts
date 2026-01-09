@@ -1,12 +1,18 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const logger = new Logger('Bootstrap');
+
   app.setGlobalPrefix('api');
+
+  // Global Exception Filter
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -40,11 +46,15 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(process.env.PORT ?? 3000);
-  console.log(
+  logger.log(
     `🚀 Application running on: http://localhost:${process.env.PORT ?? 3000}`,
   );
-  console.log(
+  logger.log(
     `📚 Swagger docs: http://localhost:${process.env.PORT ?? 3000}/api/docs`,
   );
 }
-bootstrap();
+
+bootstrap().catch((error) => {
+  console.error('❌ Error starting application:', error);
+  process.exit(1);
+});

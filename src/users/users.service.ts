@@ -53,7 +53,10 @@ export class UsersService {
     return this.excludePassword(user);
   }
 
-  async update(id: string, data: UpdateUserDto): Promise<Omit<User, 'password'>> {
+  async update(
+    id: string,
+    data: UpdateUserDto,
+  ): Promise<Omit<User, 'password'>> {
     await this.findById(id);
 
     if (data.password) {

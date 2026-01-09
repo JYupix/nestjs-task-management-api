@@ -1,18 +1,17 @@
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-  <a href="https://www.prisma.io/" target="blank"><img src="https://cdn.worldvectorlogo.com/logos/prisma-2.svg" width="120" alt="Prisma Logo" /></a>
 </p>
 
-<h1 align="center">🚀 Tasks API - NestJS + Prisma + JWT</h1>
+<h1 align="center">🚀 Tasks Management API</h1>
 
 <p align="center">
-  A professional RESTful API for task management with JWT authentication, role-based authorization, and comprehensive API documentation
+  <strong>Production-ready REST API with JWT authentication, role-based authorization, and enterprise-grade security</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white" alt="NestJS" />
-  <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma" />
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
   <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white" alt="JWT" />
   <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" />
@@ -20,21 +19,319 @@
 
 ---
 
-## 📋 Table of Contents
+## ⚡ Quick Start
 
-- [Description](#-description)
-- [Features](#-features)
-- [Technologies](#-technologies)
-- [Architecture](#-architecture)
-- [Installation](#-installation)
-- [Configuration](#️-configuration)
-- [Running the App](#-running-the-app)
-- [API Documentation](#-api-documentation)
-- [Authentication](#-authentication)
-- [Authorization & Roles](#-authorization--roles)
-- [API Endpoints](#-api-endpoints)
-- [Database Schema](#-database-schema)
-- [Project Structure](#-project-structure)
+```bash
+# 1. Clone the repository
+git clone https://github.com/JYupix/nestjs-task-management-api.git
+cd nestjs-task-management-api
+
+# 2. Install dependencies
+npm install
+
+# 3. Configure environment (copy .env.example to .env and fill values)
+cp .env.example .env
+
+# 4. Run database migrations
+npx prisma migrate dev
+
+# 5. Start development server
+npm run start:dev
+
+# 6. Open Swagger Documentation
+# http://localhost:3000/api/docs
+```
+
+---
+
+## ✨ Key Features
+
+### 🔐 **Security & Authentication**
+- ✅ **JWT Authentication** with Passport strategies (Local + JWT)
+- ✅ **Role-Based Access Control** (USER, ADMIN)
+- ✅ **Password encryption** with bcrypt
+- ✅ **Helmet security** - 15 HTTP security headers
+- ✅ **CORS enabled** - Frontend-ready
+- ✅ **User isolation** - Users only access their own data
+
+### 📊 **Monitoring & Reliability**
+- ✅ **Health check endpoint** - `/api/health` with database connection status
+- ✅ **Professional logging** - Request/error tracking with NestJS Logger
+- ✅ **Global exception filter** - Consistent error responses
+- ✅ **Request validation** - DTO validation with class-validator
+
+### 📚 **Developer Experience**
+- ✅ **Interactive API documentation** - Swagger/OpenAPI with Try it out
+- ✅ **Type-safe database** operations with Prisma ORM
+- ✅ **Modular architecture** - Clean separation of concerns
+- ✅ **Environment configuration** - `.env.example` template included
+
+### 🎯 **Core Functionality**
+- ✅ **Task Management** - Full CRUD with filtering and search
+- ✅ **User Management** - Admin-only user operations
+- ✅ **Authentication** - Register and login endpoints
+- ✅ **Authorization** - Protected routes with guards
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology | Version |
+|----------|-----------|---------|
+| **Framework** | NestJS | 11.0.1 |
+| **Language** | TypeScript | 5.7.3 |
+| **Database** | PostgreSQL | Latest |
+| **ORM** | Prisma | 7.2.0 |
+| **Authentication** | Passport JWT | 4.0.1 |
+| **Validation** | class-validator | 0.14.3 |
+| **Documentation** | Swagger | 11.2.4 |
+| **Security** | Helmet | Latest |
+
+---
+
+## 📖 API Documentation
+
+### Interactive Documentation
+Access the full interactive API documentation at:
+```
+http://localhost:3000/api/docs
+```
+
+### Main Endpoints
+
+#### 🔓 Public Endpoints
+```http
+POST   /api/auth/register    # Register new user
+POST   /api/auth/login       # Login and get JWT token
+GET    /api/health           # Health check endpoint
+```
+
+#### 🔐 Protected Endpoints (Require JWT)
+```http
+GET    /api/tasks            # Get all user tasks (with filters)
+GET    /api/tasks/:id        # Get task by ID
+POST   /api/tasks            # Create new task
+PATCH  /api/tasks/:id        # Update task
+DELETE /api/tasks/:id        # Delete task
+```
+
+#### 👑 Admin Only Endpoints
+```http
+GET    /api/users            # Get all users
+GET    /api/users/:id        # Get user by ID
+POST   /api/users            # Create user (can set role)
+PATCH  /api/users/:id        # Update user
+DELETE /api/users/:id        # Delete user
+```
+
+---
+
+## 🔐 Security Features
+
+### Helmet Security Headers
+The API includes 15+ security headers via Helmet:
+- `Content-Security-Policy` - Prevents XSS attacks
+- `X-Frame-Options` - Prevents clickjacking
+- `Strict-Transport-Security` - Forces HTTPS
+- `X-Content-Type-Options` - Prevents MIME sniffing
+- And more...
+
+### Authentication Flow
+1. User registers or logs in → Receives JWT token
+2. Include token in requests: `Authorization: Bearer <token>`
+3. Server validates token and extracts user info
+4. Access granted based on role (USER/ADMIN)
+
+### Data Isolation
+- Users can only access their own tasks
+- Attempting to access other users' data returns `403 Forbidden`
+- Admin users have full access to manage all users
+
+---
+
+## 📊 Health Monitoring
+
+### Health Check Endpoint
+```http
+GET /api/health
+```
+
+**Response (Healthy):**
+```json
+{
+  "status": "ok",
+  "timestamp": "2026-01-09T17:30:00.000Z",
+  "uptime": 123.45,
+  "database": "connected"
+}
+```
+
+Use this endpoint for:
+- Docker health checks
+- Kubernetes liveness/readiness probes
+- Load balancer health checks
+- Monitoring tools (Datadog, New Relic)
+
+---
+
+## 🚀 Project Structure
+
+```
+src/
+├── auth/                    # Authentication module
+│   ├── strategies/          # Passport strategies (Local, JWT)
+│   ├── guards/              # Auth guards (JWT, Roles, Local)
+│   ├── decorators/          # Custom decorators (@CurrentUser, @Roles)
+│   └── dto/                 # Login, Register DTOs
+├── users/                   # User management (Admin only)
+│   ├── users.controller.ts
+│   ├── users.service.ts
+│   └── dto/
+├── tasks/                   # Task management
+│   ├── tasks.controller.ts
+│   ├── tasks.service.ts
+│   └── dto/
+├── health/                  # Health check endpoint
+│   ├── health.controller.ts
+│   └── health.service.ts
+├── prisma/                  # Prisma configuration
+│   ├── prisma.module.ts
+│   └── prisma.service.ts
+├── common/                  # Shared resources
+│   └── filters/             # Global exception filter
+└── main.ts                  # Application entry point
+```
+
+---
+
+## 🗄️ Database Schema
+
+### User Model
+```prisma
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Encrypted with bcrypt
+  name      String
+  role      UserRole @default(USER)
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+```
+
+### Task Model
+```prisma
+model Task {
+  id          String      @id @default(uuid())
+  title       String
+  description String
+  status      TaskStatus  @default(PENDING)
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+```
+
+---
+
+## 🔧 Environment Variables
+
+Create a `.env` file based on `.env.example`:
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/taskdb"
+
+# JWT
+JWT_SECRET="your-super-secret-key-change-this"
+
+# Server
+PORT=3000
+```
+
+---
+
+## 📝 Available Scripts
+
+```bash
+# Development
+npm run start:dev          # Start with hot-reload
+
+# Production
+npm run build              # Build for production
+npm run start:prod         # Run production build
+
+# Database
+npx prisma migrate dev     # Run migrations
+npx prisma studio          # Open Prisma Studio (DB GUI)
+npx prisma generate        # Generate Prisma Client
+
+# Code Quality
+npm run lint               # Run ESLint
+npm run format             # Format with Prettier
+```
+
+---
+
+## 🎯 What Makes This Project Stand Out
+
+### ✅ Production-Ready
+- Global exception handling
+- Professional logging system
+- Health checks for monitoring
+- Security headers with Helmet
+- Environment-based configuration
+
+### ✅ Developer-Friendly
+- Complete Swagger documentation
+- Type-safe with TypeScript
+- Clean, modular architecture
+- Validation on all inputs
+- Consistent error responses
+
+### ✅ Secure by Design
+- JWT authentication
+- Role-based authorization
+- Password encryption
+- User data isolation
+- 15+ security headers
+
+### ✅ Best Practices
+- SOLID principles
+- Clean Code
+- Separation of concerns
+- DTO validation
+- Error handling
+
+---
+
+## 🤝 Contributing
+
+This is a portfolio project, but feel free to:
+- Report bugs
+- Suggest improvements
+- Fork and create your own version
+
+---
+
+## 📄 License
+
+This project is [MIT licensed](LICENSE).
+
+---
+
+## 👤 Author
+
+**JYupix**
+
+- GitHub: [@JYupix](https://github.com/JYupix)
+- Project: [nestjs-task-management-api](https://github.com/JYupix/nestjs-task-management-api)
+
+---
+
+<p align="center">Made with ❤️ using NestJS</p>
 ---
 
 ## 📋 Description

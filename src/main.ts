@@ -4,14 +4,18 @@ import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
 
+  app.use(helmet());
+
+  app.enableCors();
+
   app.setGlobalPrefix('api');
 
-  // Global Exception Filter
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.useGlobalPipes(
@@ -22,7 +26,6 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger Configuration
   const config = new DocumentBuilder()
     .setTitle('Tasks API')
     .setDescription(

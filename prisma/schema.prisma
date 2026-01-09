@@ -32,6 +32,9 @@ model User {
   updatedAt DateTime @updatedAt
   
   tasks     Task[]
+  
+  @@index([email])
+  @@index([role])
 }
 
 model Task {
@@ -46,4 +49,7 @@ model Task {
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@index([userId])
+  @@index([status])
+  @@index([userId, status])
+  @@index([createdAt])
 }

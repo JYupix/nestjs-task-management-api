@@ -5,13 +5,19 @@ import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import helmet from 'helmet';
+import compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
 
+  // Security: HTTP headers protection
   app.use(helmet());
 
+  // Performance: Compress responses (gzip)
+  app.use(compression());
+
+  // CORS: Enable cross-origin requests
   app.enableCors();
 
   app.setGlobalPrefix('api');

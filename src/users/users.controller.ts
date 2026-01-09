@@ -34,7 +34,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Get all users (Admin only)' })
   @ApiResponse({ status: 200, description: 'List of users' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<Omit<User, 'password'>[]> {
     return this.usersService.findAll();
   }
 
@@ -44,7 +44,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User found' })
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
-  async findById(@Param('id') id: string): Promise<User> {
+  async findById(@Param('id') id: string): Promise<Omit<User, 'password'>> {
     return this.usersService.findById(id);
   }
 
@@ -54,7 +54,7 @@ export class UsersController {
   @ApiResponse({ status: 201, description: 'User created successfully' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
-  async create(@Body() dto: CreateUserDto): Promise<User> {
+  async create(@Body() dto: CreateUserDto): Promise<Omit<User, 'password'>> {
     return this.usersService.create(dto);
   }
 
@@ -67,7 +67,7 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<Omit<User, 'password'>> {
     return this.usersService.update(id, dto);
   }
 
@@ -77,7 +77,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'User deleted successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
-  async delete(@Param('id') id: string): Promise<User> {
+  async delete(@Param('id') id: string): Promise<Omit<User, 'password'>> {
     return this.usersService.delete(id);
   }
 }

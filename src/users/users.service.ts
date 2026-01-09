@@ -13,23 +13,30 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+  private excludePassword(user: User): Omit<User, 'password'> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
   }
 
-  async findById(id: string): Promise<User> {
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.prisma.user.findMany();
+    return users.map((user) => this.excludePassword(user));
+  }
+
+  async findById(id: string): Promise<Omit<User, 'password'>> {
     const user = await this.prisma.user.findFirst({ where: { id } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    return user;
+    return this.excludePassword(user);
   }
 
   async findByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async create(data: CreateUserDto): Promise<User> {
+  async create(data: CreateUserDto): Promise<Omit<User, 'password'>> {
     const userExists = await this.prisma.user.findUnique({
       where: { email: data.email },
     });
@@ -40,27 +47,29 @@ export class UsersService {
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: { ...data, password: hashedPassword },
     });
+    return this.excludePassword(user);
   }
 
-  async update(id: string, data: UpdateUserDto): Promise<User> {
-    await this.findById(id); // Verify existence
+  async update(id: string, data: UpdateUserDto): Promise<Omit<User, 'password'>> {
+    await this.findById(id);
 
-    // Si el DTO incluye password, hashearlo
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }
 
-    return this.prisma.user.update({
+    const user = await this.prisma.user.update({
       where: { id },
       data,
     });
+    return this.excludePassword(user);
   }
 
-  async delete(id: string): Promise<User> {
-    await this.findById(id); // Verify existence
-    return this.prisma.user.delete({ where: { id } });
+  async delete(id: string): Promise<Omit<User, 'password'>> {
+    await this.findById(id);
+    const user = await this.prisma.user.delete({ where: { id } });
+    return this.excludePassword(user);
   }
 }

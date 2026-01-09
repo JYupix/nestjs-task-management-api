@@ -21,7 +21,7 @@ export class AuthService {
     return user;
   }
 
-  login(user: User): { access_token: string } {
+  login(user: User | Omit<User, 'password'>): { access_token: string } {
     const payload = { sub: user.id, email: user.email, role: user.role };
     return {
       access_token: this.jwtService.sign(payload),

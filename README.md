@@ -13,7 +13,7 @@
 [![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 [![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://swagger.io/)
 
-**[Live API Documentation](http://localhost:3000/api/docs)** • **[GitHub Repository](https://github.com/JYupix/nestjs-task-management-api)**
+**[Live API Documentation](http://localhost:3000/api/docs)**
 
 </div>
 

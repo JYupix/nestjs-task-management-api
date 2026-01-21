@@ -152,6 +152,13 @@ npm run start:dev
 | `GET` | `/api/health` | Health check |
 
 ### 🔐 Protected Endpoints (JWT Required)
+
+#### Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/auth/profile` | Get authenticated user profile |
+
+#### Tasks
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/api/tasks` | Get user's tasks (supports filters) |

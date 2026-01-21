@@ -37,4 +37,9 @@ export class AuthService {
     const user = await this.usersService.create(registerDto);
     return this.login(user);
   }
+
+  async getProfile(userId: string): Promise<Omit<User, 'password'>> {
+    this.logger.log(`Fetching profile for user: ${userId}`);
+    return this.usersService.findById(userId);
+  }
 }

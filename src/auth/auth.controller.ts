@@ -21,6 +21,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { JwtPayload } from './interfaces/jwt-payload.interface';
+import type { AuthResponse } from './auth.service';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -32,23 +33,23 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   @ApiResponse({
     status: 200,
-    description: 'Login successful, returns JWT token',
+    description: 'Login successful, returns JWT token plus user info',
   })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @Post('login')
-  login(@Request() req: { user: User }): { access_token: string } {
+  login(@Request() req: { user: User }): AuthResponse {
     return this.authService.login(req.user);
   }
 
   @ApiOperation({ summary: 'Register new user' })
   @ApiResponse({
     status: 201,
-    description: 'User created successfully, returns JWT token',
+    description: 'User created successfully, returns JWT token plus user info',
   })
   @ApiResponse({ status: 409, description: 'Email already exists' })
   @ApiResponse({ status: 400, description: 'Invalid data' })
   @Post('register')
-  async register(@Body() dto: RegisterDto): Promise<{ access_token: string }> {
+  async register(@Body() dto: RegisterDto): Promise<AuthResponse> {
     return this.authService.register(dto);
   }
 

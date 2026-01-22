@@ -147,8 +147,8 @@ npm run start:dev
 ### 🔓 Public Endpoints
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/api/auth/register` | Register new user |
-| `POST` | `/api/auth/login` | Login & get JWT token |
+| `POST` | `/api/auth/register` | Register new user (returns JWT + user) |
+| `POST` | `/api/auth/login` | Login & get JWT + user |
 | `GET` | `/api/health` | Health check |
 
 ### 🔐 Protected Endpoints (JWT Required)
@@ -157,6 +157,24 @@ npm run start:dev
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/api/auth/profile` | Get authenticated user profile |
+
+**Auth response body (login/register):**
+
+```json
+{
+  "accessToken": "jwt-token",
+  "tokenType": "Bearer",
+  "expiresIn": 86400,
+  "user": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "role": "USER",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  }
+}
+```
 
 #### Tasks
 | Method | Endpoint | Description |

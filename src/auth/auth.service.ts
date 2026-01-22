@@ -6,6 +6,13 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { Logger } from '@nestjs/common';
 
+export type AuthResponse = {
+  accessToken: string;
+  tokenType: 'Bearer';
+  expiresIn: number; // seconds until expiration
+  user: Omit<User, 'password'>;
+};
+
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
@@ -24,15 +31,30 @@ export class AuthService {
     return user;
   }
 
-  login(user: User | Omit<User, 'password'>): { access_token: string } {
+  private sanitizeUser(
+    user: User | Omit<User, 'password'>,
+  ): Omit<User, 'password'> {
+    const { password: _password, ...userWithoutPassword } = user as User;
+    void _password; // explicitly discard sensitive field
+    return userWithoutPassword;
+  }
+
+  login(user: User | Omit<User, 'password'>): AuthResponse {
     const payload = { sub: user.id, email: user.email, role: user.role };
+    const sanitizedUser = this.sanitizeUser(user);
+    const expiresInSeconds = 24 * 60 * 60; // aligns with JwtModule signOptions: 1d
+
     this.logger.log(`Token generated for user: ${user.email}`);
+
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
+      tokenType: 'Bearer',
+      expiresIn: expiresInSeconds,
+      user: sanitizedUser,
     };
   }
 
-  async register(registerDto: RegisterDto): Promise<{ access_token: string }> {
+  async register(registerDto: RegisterDto): Promise<AuthResponse> {
     this.logger.log(`New user registration: ${registerDto.email}`);
     const user = await this.usersService.create(registerDto);
     return this.login(user);
